@@ -17,8 +17,8 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
     const map = new mapboxgl.Map({
       container: mapboxContainerRef.current,
       style: 'mapbox://styles/mapbox/streets-v11',
-      center: coordinates[0],
-      zoom: 22, // Increased zoom level by 2 (from 20 to 22)
+      center: coordinates[17], // Center on the 18th point (index 17)
+      zoom: 21, // Reduced zoom level by 1 (from 22 to 21)
       bearing: 202,
       pitch: 45,
     });
