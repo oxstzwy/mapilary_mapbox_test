@@ -19,7 +19,7 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
       style: 'mapbox://styles/mapbox/streets-v11',
       center: coordinates[0],
       zoom: 20,
-      bearing: 0, // Set the initial bearing to 0 to orient the map to north
+      bearing: 202, // Set the initial bearing to 202 degrees
     });
 
     mapRef.current = map;
