@@ -1,14 +1,25 @@
 import mapboxgl from 'mapbox-gl';
 
-export const createMarkerElement = (isActive = false) => {
+export const createMarkerElement = (isActive = false, isHovered = false) => {
   const el = document.createElement('div');
   el.className = 'marker';
-  el.style.backgroundColor = isActive ? '#FF0000' : '#3FB1CE';
   el.style.width = '20px';
   el.style.height = '20px';
   el.style.borderRadius = '50%';
   el.style.cursor = 'pointer';
+  el.style.transition = 'background-color 0.3s ease';
+  updateMarkerStyle(el, isActive, isHovered);
   return el;
+};
+
+export const updateMarkerStyle = (el, isActive, isHovered) => {
+  if (isActive) {
+    el.style.backgroundColor = '#FF0000';
+  } else if (isHovered) {
+    el.style.backgroundColor = '#FFA500';
+  } else {
+    el.style.backgroundColor = '#3FB1CE';
+  }
 };
 
 export const addMarkersToMap = (map, coordinates, imageIds, viewerRef, setCurrentImageId) => {
@@ -21,6 +32,14 @@ export const addMarkersToMap = (map, coordinates, imageIds, viewerRef, setCurren
         viewerRef.current.moveTo(imageIds[index]).catch(console.error);
         setCurrentImageId(imageIds[index]);
       }
+    });
+
+    el.addEventListener('mouseenter', () => {
+      updateMarkerStyle(el, imageIds[index] === setCurrentImageId, true);
+    });
+
+    el.addEventListener('mouseleave', () => {
+      updateMarkerStyle(el, imageIds[index] === setCurrentImageId, false);
     });
 
     return marker;

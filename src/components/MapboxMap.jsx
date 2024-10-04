@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { createMarkerElement, addMarkersToMap, drawPathOnMap, updateFieldOfView } from '../utils/mapUtils';
+import { addMarkersToMap, drawPathOnMap, updateFieldOfView, updateMarkerStyle } from '../utils/mapUtils';
 
 export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => {
   const mapboxContainerRef = useRef(null);
@@ -99,11 +99,7 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
     if (currentImageId && markersRef.current) {
       markersRef.current.forEach((marker, index) => {
         const el = marker.getElement();
-        if (imageIds[index] === currentImageId) {
-          el.style.backgroundColor = '#FF0000';
-        } else {
-          el.style.backgroundColor = '#3FB1CE';
-        }
+        updateMarkerStyle(el, imageIds[index] === currentImageId, false);
       });
     }
   }, [currentImageId, imageIds]);
