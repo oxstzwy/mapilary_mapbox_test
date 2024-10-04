@@ -20,7 +20,7 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
       center: coordinates[0],
       zoom: 20,
       bearing: 202,
-      pitch: 15, // Set the initial pitch to 15 degrees
+      pitch: 45, // Updated pitch to 45 degrees
     });
 
     mapRef.current = map;
