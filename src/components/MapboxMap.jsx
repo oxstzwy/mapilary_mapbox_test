@@ -19,7 +19,8 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
       style: 'mapbox://styles/mapbox/streets-v11',
       center: coordinates[0],
       zoom: 20,
-      bearing: 202, // Set the initial bearing to 202 degrees
+      bearing: 202,
+      pitch: 15, // Set the initial pitch to 15 degrees
     });
 
     mapRef.current = map;
@@ -34,7 +35,6 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
       });
       map.addControl(scale, 'bottom-left');
 
-      // Add a button to reset the map orientation to north
       const resetNorthControl = new mapboxgl.NavigationControl({
         showCompass: false,
         showZoom: false,
