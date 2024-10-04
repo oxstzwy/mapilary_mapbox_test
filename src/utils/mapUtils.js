@@ -15,19 +15,6 @@ export const addMarkersToMap = (map, coordinates, imageIds, viewerRef, setCurren
   return coordinates.map((coord, index) => {
     const el = createMarkerElement();
     const marker = new mapboxgl.Marker(el).setLngLat(coord).addTo(map);
-    const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false });
-
-    el.addEventListener('mouseenter', () => {
-      map.getCanvas().style.cursor = 'pointer';
-      popup.setLngLat(coord)
-           .setHTML(`Ordem: ${index + 1}<br>Image ID: ${imageIds[index]}`)
-           .addTo(map);
-    });
-
-    el.addEventListener('mouseleave', () => {
-      map.getCanvas().style.cursor = '';
-      popup.remove();
-    });
 
     el.addEventListener('click', () => {
       if (viewerRef.current && viewerRef.current.isNavigable) {
