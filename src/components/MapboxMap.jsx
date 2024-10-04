@@ -18,9 +18,9 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
       container: mapboxContainerRef.current,
       style: 'mapbox://styles/mapbox/streets-v11',
       center: coordinates[0],
-      zoom: 20,
+      zoom: 22, // Increased zoom level by 2 (from 20 to 22)
       bearing: 202,
-      pitch: 45, // Updated pitch to 45 degrees
+      pitch: 45,
     });
 
     mapRef.current = map;
@@ -35,11 +35,16 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
       });
       map.addControl(scale, 'bottom-left');
 
-      const resetNorthControl = new mapboxgl.NavigationControl({
-        showCompass: false,
-        showZoom: false,
-      });
-      map.addControl(resetNorthControl, 'top-right');
+      // Add zoom control to the upper right corner
+      const zoomControl = new mapboxgl.NavigationControl();
+      map.addControl(zoomControl, 'top-right');
+
+      // Remove the reset north control as it's now included in the zoom control
+      // const resetNorthControl = new mapboxgl.NavigationControl({
+      //   showCompass: false,
+      //   showZoom: false,
+      // });
+      // map.addControl(resetNorthControl, 'top-right');
 
       map.addSource('fov', {
         type: 'geojson',
