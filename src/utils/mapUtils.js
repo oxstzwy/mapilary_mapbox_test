@@ -1,6 +1,6 @@
 import mapboxgl from 'mapbox-gl';
 
-export const createMarkerElement = (isActive = false, isHovered = false) => {
+export const createMarkerElement = (isActive = false) => {
   const el = document.createElement('div');
   el.className = 'marker';
   el.style.width = '20px';
@@ -8,38 +8,29 @@ export const createMarkerElement = (isActive = false, isHovered = false) => {
   el.style.borderRadius = '50%';
   el.style.cursor = 'pointer';
   el.style.transition = 'background-color 0.3s ease';
-  updateMarkerStyle(el, isActive, isHovered);
+  updateMarkerStyle(el, isActive);
   return el;
 };
 
-export const updateMarkerStyle = (el, isActive, isHovered) => {
-  if (isActive) {
-    el.style.backgroundColor = '#FF0000';
-  } else if (isHovered) {
-    el.style.backgroundColor = '#FFA500';
-  } else {
-    el.style.backgroundColor = '#3FB1CE';
-  }
+export const updateMarkerStyle = (el, isActive) => {
+  el.style.backgroundColor = isActive ? '#FF0000' : '#3FB1CE';
 };
 
-export const addMarkersToMap = (map, coordinates, imageIds, viewerRef, setCurrentImageId) => {
+export const addMarkersToMap = (map, coordinates, imageIds, viewerRef, setActiveMarkers) => {
   return coordinates.map((coord, index) => {
-    const el = createMarkerElement();
+    const isFirstMarker = index === 0;
+    const el = createMarkerElement(isFirstMarker);
     const marker = new mapboxgl.Marker(el).setLngLat(coord).addTo(map);
 
     el.addEventListener('click', () => {
       if (viewerRef.current && viewerRef.current.isNavigable) {
         viewerRef.current.moveTo(imageIds[index]).catch(console.error);
-        setCurrentImageId(imageIds[index]);
+        setActiveMarkers(prevActiveMarkers => {
+          const newActiveMarkers = new Set(prevActiveMarkers);
+          newActiveMarkers.add(index);
+          return newActiveMarkers;
+        });
       }
-    });
-
-    el.addEventListener('mouseenter', () => {
-      updateMarkerStyle(el, imageIds[index] === setCurrentImageId, true);
-    });
-
-    el.addEventListener('mouseleave', () => {
-      updateMarkerStyle(el, imageIds[index] === setCurrentImageId, false);
     });
 
     return marker;
