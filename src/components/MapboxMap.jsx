@@ -17,8 +17,8 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
     const map = new mapboxgl.Map({
       container: mapboxContainerRef.current,
       style: 'mapbox://styles/mapbox/streets-v11',
-      center: coordinates[17], // Center on the 18th point (index 17)
-      zoom: 21, // Reduced zoom level by 1 (from 22 to 21)
+      center: coordinates[17],
+      zoom: 21,
       bearing: 202,
       pitch: 45,
     });
@@ -35,16 +35,8 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
       });
       map.addControl(scale, 'bottom-left');
 
-      // Add zoom control to the upper right corner
       const zoomControl = new mapboxgl.NavigationControl();
       map.addControl(zoomControl, 'top-right');
-
-      // Remove the reset north control as it's now included in the zoom control
-      // const resetNorthControl = new mapboxgl.NavigationControl({
-      //   showCompass: false,
-      //   showZoom: false,
-      // });
-      // map.addControl(resetNorthControl, 'top-right');
 
       map.addSource('fov', {
         type: 'geojson',
@@ -87,10 +79,11 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
         const pov = viewerRef.current.getPointOfView();
         if (pov) {
           updateFieldOfView(mapRef.current, fovLayerRef.current, pov);
-          const currentId = viewerRef.current.getCurrentId();
-          if (currentId) {
-            setCurrentImageId(currentId);
-          }
+          viewerRef.current.getImage().then(image => {
+            if (image) {
+              setCurrentImageId(image.id);
+            }
+          }).catch(console.error);
         }
       };
 
@@ -107,9 +100,9 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
       markersRef.current.forEach((marker, index) => {
         const el = marker.getElement();
         if (imageIds[index] === currentImageId) {
-          el.style.backgroundColor = '#FF0000'; // Highlight color for current image
+          el.style.backgroundColor = '#FF0000';
         } else {
-          el.style.backgroundColor = '#3FB1CE'; // Default color
+          el.style.backgroundColor = '#3FB1CE';
         }
       });
     }
