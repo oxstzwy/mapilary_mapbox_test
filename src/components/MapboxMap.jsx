@@ -19,6 +19,7 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
       style: 'mapbox://styles/mapbox/streets-v11',
       center: coordinates[0],
       zoom: 20,
+      bearing: 0, // Set the initial bearing to 0 to orient the map to north
     });
 
     mapRef.current = map;
@@ -33,27 +34,12 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
       });
       map.addControl(scale, 'bottom-left');
 
-      class NorthArrowControl {
-        onAdd(map) {
-          this._map = map;
-          this._container = document.createElement('div');
-          this._container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
-          this._container.innerHTML = `
-            <div class="north-arrow">
-              <div class="north-arrow-pointer"></div>
-              <div class="north-arrow-n">N</div>
-            </div>
-          `;
-          return this._container;
-        }
-
-        onRemove() {
-          this._container.parentNode.removeChild(this._container);
-          this._map = undefined;
-        }
-      }
-
-      map.addControl(new NorthArrowControl(), 'top-right');
+      // Add a button to reset the map orientation to north
+      const resetNorthControl = new mapboxgl.NavigationControl({
+        showCompass: false,
+        showZoom: false,
+      });
+      map.addControl(resetNorthControl, 'top-right');
 
       map.addSource('fov', {
         type: 'geojson',
