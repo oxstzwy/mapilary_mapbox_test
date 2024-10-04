@@ -16,20 +16,15 @@ export const updateMarkerStyle = (el, isActive) => {
   el.style.backgroundColor = isActive ? '#FF0000' : '#3FB1CE';
 };
 
-export const addMarkersToMap = (map, coordinates, imageIds, viewerRef, setActiveMarkers) => {
+export const addMarkersToMap = (map, coordinates, imageIds, viewerRef, setActiveMarkerIndex) => {
   return coordinates.map((coord, index) => {
-    const isFirstMarker = index === 0;
-    const el = createMarkerElement(isFirstMarker);
+    const el = createMarkerElement(index === 0);
     const marker = new mapboxgl.Marker(el).setLngLat(coord).addTo(map);
 
     el.addEventListener('click', () => {
       if (viewerRef.current && viewerRef.current.isNavigable) {
         viewerRef.current.moveTo(imageIds[index]).catch(console.error);
-        setActiveMarkers(prevActiveMarkers => {
-          const newActiveMarkers = new Set(prevActiveMarkers);
-          newActiveMarkers.add(index);
-          return newActiveMarkers;
-        });
+        setActiveMarkerIndex(index);
       }
     });
 

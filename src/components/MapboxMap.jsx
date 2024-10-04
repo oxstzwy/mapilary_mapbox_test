@@ -8,7 +8,7 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
   const mapRef = useRef(null);
   const fovLayerRef = useRef(null);
   const markersRef = useRef([]);
-  const [activeMarkers, setActiveMarkers] = useState(new Set([0])); // Initialize with the first marker active
+  const [activeMarkerIndex, setActiveMarkerIndex] = useState(0);
 
   useEffect(() => {
     if (!mapboxContainerRef.current) return;
@@ -26,7 +26,7 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
     mapRef.current = map;
 
     map.on('load', () => {
-      markersRef.current = addMarkersToMap(map, coordinates, imageIds, viewerRef, setActiveMarkers);
+      markersRef.current = addMarkersToMap(map, coordinates, imageIds, viewerRef, setActiveMarkerIndex);
       drawPathOnMap(map, coordinates);
 
       const scale = new mapboxgl.ScaleControl({
@@ -82,22 +82,32 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
         }
       };
 
+      const handleImageChange = () => {
+        const currentImageId = viewerRef.current.getImage().id;
+        const newActiveIndex = imageIds.indexOf(currentImageId);
+        if (newActiveIndex !== -1) {
+          setActiveMarkerIndex(newActiveIndex);
+        }
+      };
+
       viewerRef.current.on('position', updateFOV);
+      viewerRef.current.on('image', handleImageChange);
 
       return () => {
         viewerRef.current.off('position', updateFOV);
+        viewerRef.current.off('image', handleImageChange);
       };
     }
-  }, [viewerRef]);
+  }, [viewerRef, imageIds]);
 
   useEffect(() => {
     if (markersRef.current) {
       markersRef.current.forEach((marker, index) => {
         const el = marker.getElement();
-        updateMarkerStyle(el, activeMarkers.has(index));
+        updateMarkerStyle(el, index === activeMarkerIndex);
       });
     }
-  }, [activeMarkers]);
+  }, [activeMarkerIndex]);
 
   return <div ref={mapboxContainerRef} className="w-1/2 h-full" />;
 };
