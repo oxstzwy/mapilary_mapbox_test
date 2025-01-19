@@ -45,7 +45,7 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
           properties: {},
           geometry: {
             type: 'Point',
-            coordinates: coordinates[0],
+            coordinates: coordinates[-59.974449807501856,-3.0994837982291283],
           },
         },
       });
