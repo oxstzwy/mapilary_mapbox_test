@@ -18,8 +18,8 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
       container: mapboxContainerRef.current,
       style: 'mapbox://styles/mapbox/streets-v11',
       center: coordinates[20],
-      zoom: 10,
-      bearing: 202,
+      zoom: 12,
+      bearing: 90,
       pitch: 60,
     });
 
