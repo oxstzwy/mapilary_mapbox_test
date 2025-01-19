@@ -18,7 +18,7 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
       container: mapboxContainerRef.current,
       style: 'mapbox://styles/mapbox/streets-v11',
       center: coordinates[17],
-      zoom: 21,
+      zoom: 22,
       bearing: 202,
       pitch: 45,
     });
@@ -45,7 +45,7 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
           properties: {},
           geometry: {
             type: 'Point',
-            coordinates: coordinates[-59,-3],
+            coordinates: coordinates[-59.97442388601553,-3.0999961335280894],
           },
         },
       });
