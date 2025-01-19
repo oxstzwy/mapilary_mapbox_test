@@ -18,9 +18,9 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
       container: mapboxContainerRef.current,
       style: 'mapbox://styles/mapbox/streets-v11',
       center: coordinates[17],
-      zoom: 24,
+      zoom: 26,
       bearing: 202,
-      pitch: 90,
+      pitch: 35,
     });
 
     mapRef.current = map;
@@ -30,7 +30,7 @@ export const MapboxMap = ({ accessToken, coordinates, imageIds, viewerRef }) => 
       drawPathOnMap(map, coordinates);
 
       const scale = new mapboxgl.ScaleControl({
-        maxWidth: 80,
+        maxWidth: 100,
         unit: 'metric'
       });
       map.addControl(scale, 'bottom-left');
